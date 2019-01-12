@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  proxy:
+    image: siteimagenasa-nginx
+    build:
+      context: .
+    ports:
+      - "30000:80"
+    depends_on:
+      - appsiteimagenasa01
+      - appsiteimagenasa02
+      - appsiteimagenasa03
+    networks:
+      - nasa-network
+
+  appsiteimagenasa01:
+    image: siteimagemnasa
+    ports:
+      - "30001:80"
+    networks:
+      - nasa-network
+    depends_on:
+      - "redisimagemnasa"
+
+  appsiteimagenasa02:
+    image: siteimagemnasa
+    ports:
+      - "30002:80"
+    networks:
+      - nasa-network
+    depends_on:
+      - "redisimagemnasa"
+
+  appsiteimagenasa03:
+    image: siteimagemnasa
+    ports:
+      - "30003:80"
+    networks:
+      - nasa-network
+    depends_on:
+      - "redisimagemnasa"
+
+  redisimagemnasa:
+    image: redis:alpine
+    ports:
+      - "46379:6379"
+    networks:
+      - nasa-network
+
+networks: 
+    nasa-network:
+      driver: bridge
